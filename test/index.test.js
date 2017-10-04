@@ -61,4 +61,19 @@ describe('remark-graphviz', () => {
     expect(result).not.toMatch(/!\[\]\(\.\/\w+\.svg/);
     expect(vfile.messages).toHaveLength(0);
   });
+
+  it('handles destinationDir passed as option', () => {
+    const srcFile = `${fixturesDir}/simple.md`;
+    const destFile = `${runtimeDir}/simple.md`;
+    const vfile = toVFile.readSync(srcFile);
+    const options = {
+      destinationDir: destFile
+    };
+
+    const result = remark().use(graphviz, options).processSync(vfile).toString();
+    expect(result).not.toMatch(/!\[\]\(\.\/\w+\.svg/);
+    expect(vfile.messages).toHaveLength(0);
+    expect(vfile.data.destinationDir).toBe(destFile);
+  });
+
 });

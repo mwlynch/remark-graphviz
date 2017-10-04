@@ -114,9 +114,13 @@ function visitImage(ast, vFile) {
  * @link https://github.com/unifiedjs/unified#function-transformernode-file-next
  * @link https://github.com/syntax-tree/mdast
  * @link https://github.com/vfile/vfile
+ *
+ * @param {object} options
  * @return {function}
  */
-function graphviz() {
+function graphviz(options) {
+  const destinationDir = (options || {}).destinationDir;
+
   /**
    * @param {object} ast MDAST
    * @param {vFile} vFile
@@ -124,6 +128,11 @@ function graphviz() {
    * @return {object}
    */
   return function transformer(ast, vFile, next) {
+    const data = vFile.data;
+    if (!!destinationDir && !data.destinationDir) {
+      data.destinationDir = destinationDir;
+    }
+
     visitCodeBlock(ast, vFile);
     visitLink(ast, vFile);
     visitImage(ast, vFile);
