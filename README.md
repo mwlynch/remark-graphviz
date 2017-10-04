@@ -82,8 +82,10 @@ being transformed to:
 ```
 
 To change where the SVG's are written, set `data.destinationFilePath` on the
-vFile. This following shows how you could process a file from one directory and
-output the transformed file to another:
+vFile or pass `destinationDir` as an option to the plugin. The following
+examples shows how you could process a file from one directory and output the
+transformed file to another:
+
 
 ```js
 var vfile = require('to-vfile');
@@ -105,3 +107,26 @@ remark()
 ```
 
 Both `example.md` and the generated SVG will reside in the `/out` directory.
+
+Alternatively, you can pass the destination directory as an option:
+
+```js
+var vfile = require('to-vfile');
+var remark = require('remark');
+var graphviz = require('remark-graphviz');
+
+var example = vfile.readSync('example.md');
+
+options = { destinationDir: 'out/'};
+
+remark()
+  .use(graphviz, options)
+  .process(example, function (err, file) {
+    if (err) throw err;
+
+    vfile.writeSync({ path: file.data.destinationDir });
+  });
+```
+
+Both `example.md` and the generated SVG will reside in the `/out` directory.
+
